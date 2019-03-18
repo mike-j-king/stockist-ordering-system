@@ -1,24 +1,21 @@
-# README
+# daily-mood-tracker
+___
+## Description
+This is a demonstration app built with React.JS & Ruby on Rails
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+The intention of this app is to allow a user to manage and track stockists. The all CRUD operations for:
+- Creating a new stockist
+- Reading/viewing all stockists
+- Updating a stockist
+- Deleting a stockist
 
-Things you may want to cover:
+Additional functionality is planned to be able to create new orders for a given stockist where each order can host a number of items.
 
-* Ruby version
+___
+## Heroku
+This application is currently hosted on heroku here:
 
-* System dependencies
+___
+### COMING SOON - Unit Tests
 
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Unit tests for the repo will be added soon.
