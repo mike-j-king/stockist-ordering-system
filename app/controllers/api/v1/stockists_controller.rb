@@ -19,7 +19,7 @@ module Api::V1
       @stockist = Stockist.new(stockist_params)
 
       if @stockist.save
-        render json: @stockist, status: :created, location: @stockist
+        render json: @stockist, status: :created
       else
         render json: @stockist.errors, status: :unprocessable_entity
       end
