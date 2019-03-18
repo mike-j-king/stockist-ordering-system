@@ -37,6 +37,11 @@ module Api::V1
     # DELETE /stockists/1
     def destroy
       @stockist.destroy
+      if @stockist.destroy
+        head :no_content, status: :ok
+      else
+        render json: @stockist.errors, status: :unprocessable_entity
+      end    
     end
 
     private

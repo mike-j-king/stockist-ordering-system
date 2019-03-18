@@ -12,6 +12,7 @@ class StockistsContainer extends Component {
         stockists: []
     }
     this.addNewStockist = this.addNewStockist.bind(this)
+    this.removeStockist = this.removeStockist.bind(this)
   }
 
   componentDidMount() {
@@ -37,6 +38,17 @@ class StockistsContainer extends Component {
     })
   }
 
+  removeStockist(id) {
+    axios.delete( '/api/v1/stockists/' + id )
+    .then(response => {
+        const stockists = this.state.stockists.filter(
+            stockist => stockist.id !== id
+        )
+        this.setState({stockists})
+    })
+    .catch(error => console.log(error))
+}
+
   renderStockistTable(){
     const { stockists } = this.state;
     return (
@@ -46,11 +58,12 @@ class StockistsContainer extends Component {
           <th>#</th>
           <th>Name</th>
           <th>Note</th>
+          <th>Remove</th>
         </tr>
         </thead>
         <tbody>
           {stockists.map( stockist => {
-            return (<Stockist stockist={stockist} key={stockist.id} />)
+            return (<Stockist stockist={stockist} key={stockist.id} onRemoveStockist={this.removeStockist} />)
           })}
         </tbody>
       </Table>
