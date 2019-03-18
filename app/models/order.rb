@@ -1,4 +1,4 @@
 class Order < ApplicationRecord
   belongs_to :stockist
-  has_many :items, through:items
+  has_many :items, through: :items
 end
