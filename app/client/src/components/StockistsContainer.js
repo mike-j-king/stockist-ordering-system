@@ -3,16 +3,20 @@ import axios from 'axios';
 import { Table } from 'reactstrap';
 import Stockist from './Stockist';
 import NewStockistForm from './NewStockistForm'
+import EditStockistForm from './EditStockistForm'
 
 class StockistsContainer extends Component {
 
   constructor(props){
     super(props)
     this.state = {
-        stockists: []
+        stockists: [],
+        editingStockistId: null
     }
     this.addNewStockist = this.addNewStockist.bind(this)
     this.removeStockist = this.removeStockist.bind(this)
+    this.editingStockist = this.editingStockist.bind(this)
+    this.editStockist = this.editStockist.bind(this)
   }
 
   componentDidMount() {
@@ -20,7 +24,7 @@ class StockistsContainer extends Component {
       .then(response => {
           console.log(response)
           this.setState({
-              stockists: response.data
+              stockists: response.data.sort((a, b) => a.id - b.id)
           })
       })
       .catch(error => console.log(error))
@@ -47,10 +51,35 @@ class StockistsContainer extends Component {
         this.setState({stockists})
     })
     .catch(error => console.log(error))
-}
+  }
+
+  editStockist(id, name, notes) {
+    axios.put( '/api/v1/stockists/' + id, { 
+        stockist: {
+            name, 
+            notes
+        } 
+    })
+    .then(response => {
+        console.log(response);
+        const { stockists } = this.state;
+        stockists[id-1] = {id, name, notes}
+        this.setState(() => ({
+            stockists, 
+            editingStockistId: null
+        }))
+    })
+    .catch(error => console.log(error));
+  }
+
+  editingStockist(id) {
+    this.setState({
+        editingStockistId: id
+    })
+  }
 
   renderStockistTable(){
-    const { stockists } = this.state;
+    const { stockists, editingStockistId } = this.state;
     return (
       <Table striped>
         <thead>
@@ -59,11 +88,25 @@ class StockistsContainer extends Component {
           <th>Name</th>
           <th>Note</th>
           <th>Remove</th>
+          <th>Edit</th>
         </tr>
         </thead>
         <tbody>
           {stockists.map( stockist => {
-            return (<Stockist stockist={stockist} key={stockist.id} onRemoveStockist={this.removeStockist} />)
+            if ( editingStockistId === stockist.id ) {
+              return (<EditStockistForm 
+                        stockist={stockist} 
+                        key={stockist.id} 
+                        editStockist={this.editStockist} 
+              />)
+            } else {
+              return (<Stockist 
+                        stockist={stockist} 
+                        key={stockist.id} 
+                        onRemoveStockist={this.removeStockist} 
+                        editingStockist={this.editingStockist} 
+              />)
+            }
           })}
         </tbody>
       </Table>
